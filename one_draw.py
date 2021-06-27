@@ -5,6 +5,7 @@ import threading
 import string
 import time
 import os
+import shutil
 import subprocess
 import tkinter as tk
 import tkinter.font as font
@@ -13,6 +14,13 @@ from tqdm import tqdm
 from datetime import datetime as dt
 from glob import glob
 from playsound import playsound
+
+
+# %%
+# import pyautogui
+
+# screenshot = pyautogui.screenshot()
+# screenshot.save(r"sample.png")
 
 
 # %%
@@ -51,16 +59,27 @@ print("\n------------------------\n")
 # %%
 # 環境変数の取得
 for i in range(28,len(string.ascii_letters)):
-    test_path = glob(rf"{string.ascii_letters[i]}:\Program*\CELSYS\**\CLIPStudioPaint.exe", recursive=True)
+    test_path = glob(rf"{string.ascii_letters[i]}:\Program*\CELSYS\**\CLIPStudioPaint.exe",recursive=True)
     if len(test_path) > 0:
         clip_studio = test_path[0]
         break
+    else:
+        clip_studio = "manual_launch"
 # Clipstudioの起動関数
 def lounch_cs():
-    subprocess.run([clip_studio,fr"{os.getcwd()}\1h_draw_format.clip"],check=False)
-
-csthread = threading.Thread(target=lounch_cs)
-csthread.start()
+    todate = dt.now().strftime("%Y%m%d")
+    old_data = glob(fr"{os.getcwd()}\drawdata\1h_draw_{todate}_???.clip")
+    file_num = 0
+    if len(old_data) > 0:
+        file_num = len(old_data)
+    copy_file = fr"{os.getcwd()}\drawdata\1h_draw_{todate}_{str(file_num).zfill(3)}.clip"
+    shutil.copy(fr"{os.getcwd()}\1h_draw_format.clip",copy_file)
+    subprocess.run([clip_studio,copy_file],check=False)
+if clip_studio == "manual_launch":
+    print("CLIP Studio が見当たりませんでした。申し訳ないですが手動でペイントソフトを起動してください")
+else:
+    csthread = threading.Thread(target=lounch_cs)
+    csthread.start()
 
 
 # %%
@@ -144,12 +163,12 @@ def timer():
                     buff_min.set(str(time_min))
                     buff_sec.set("59")
             if int(buff_min.get())==0 and int(buff_sec.get())==0:
-                playsound(end_voice[e_rand_num])
                 start=False
                 time_min=0
                 time_sec=0
                 buff_sec.set(str(time_sec))
                 buff_min.set(str(time_min))
+                playsound(end_voice[e_rand_num])
                 
 
             

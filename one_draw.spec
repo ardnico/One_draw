@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['one_draw.py'],
-             pathex=['D:\\develop\\python\\one_draw'],
+             pathex=['D:\\develop\\python\\one_draw\\git_dir'],
              binaries=[],
              datas=[],
              hiddenimports=[],
