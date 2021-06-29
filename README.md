@@ -26,6 +26,5 @@
 
 
 
-
-# 課題
-5分おきの作業様子をスクリーンショットで取得したい（スクリーン２のショットが取れない）
+[Pixiv](https://www.pixiv.net/users/72577)
+[Twitter](https://twitter.com/leafleaf_leaf)
